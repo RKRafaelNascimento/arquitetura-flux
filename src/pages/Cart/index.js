@@ -9,7 +9,15 @@ import { connect } from 'react-redux';
 import * as CartActions from '../../store/modules/cart/action';
 import { Container, ProductTable, Total } from './style';
 
-function Cart({ cart, removeFromCart }) {
+function Cart({ cart, removeFromCart, updateFromCart }) {
+    function increment(product) {
+        updateFromCart(product.id, product.amount + 1);
+    }
+
+    function decrement(product) {
+        updateFromCart(product.id, product.amount - 1);
+    }
+
     return (
         <Container>
             <ProductTable>
@@ -33,7 +41,10 @@ function Cart({ cart, removeFromCart }) {
                                 <span>{product.priceFormatted}</span>
                             </td>
                             <div>
-                                <button type="button">
+                                <button
+                                    type="button"
+                                    onClick={() => decrement(product)}
+                                >
                                     <MdRemoveCircleOutline
                                         size={20}
                                         color="#7159c1"
@@ -44,7 +55,10 @@ function Cart({ cart, removeFromCart }) {
                                     readOnly
                                     value={product.amount}
                                 />
-                                <button type="button">
+                                <button
+                                    type="button"
+                                    onClick={() => increment(product)}
+                                >
                                     <MdAddCircleOutline
                                         size={20}
                                         color="#7159c1"
