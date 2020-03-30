@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect } from 'react';
 import { MdAddShoppingCart } from 'react-icons/md';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
@@ -8,29 +8,28 @@ import { ProductList } from './style';
 import api from '../../services/api';
 import { formatPrice } from '../../util/format';
 
-class Home extends Component {
-    state = {
-        products: [],
-    };
+function Home ({amount, addToCartRequest}) {
 
-    async componentDidMount() {
-        const response = await api.get('products');
-        const data = response.data.map(product => ({
-            ...product,
-            priceFormatted: formatPrice(product.price),
-        }));
-        this.setState({ products: data });
-    }
+    const [products, setProducts] = useState([])
 
-    handlerAddCart = id => {
-        const { addToCartRequest } = this.props;
+     useEffect(() => {
+        async function loadProducts() {
+            const response = await api.get('products');
+            const data = response.data.map(product => ({
+                ...product,
+                priceFormatted: formatPrice(product.price),
+            }));
+
+            setProducts(data)
+        }
+
+        loadProducts();
+    }, [])
+
+   function handlerAddCart(id){
 
         addToCartRequest(id);
     };
-
-    render() {
-        const { products } = this.state;
-        const { amount } = this.props;
         return (
             <ProductList>
                 {products.map(product => (
@@ -41,7 +40,7 @@ class Home extends Component {
 
                         <button
                             type="button"
-                            onClick={() => this.handlerAddCart(product.id)}
+                            onClick={() => handlerAddCart(product.id)}
                         >
                             <div>
                                 <MdAddShoppingCart size={16} color="#FFF" />
@@ -54,7 +53,6 @@ class Home extends Component {
                 ))}
             </ProductList>
         );
-    }
 }
 
 const mapStateToProps = state => ({

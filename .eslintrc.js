@@ -4,10 +4,9 @@ module.exports = {
         es6: true,
     },
     extends: [
-        'plugin:react/recommended',
-        'airbnb',
         'prettier',
-        'prettier/react',
+        'prettier',
+        'react-hooks',
     ],
     globals: {
         Atomics: 'readonly',
@@ -31,6 +30,8 @@ module.exports = {
         'import/prefer-default-export': 'off',
         'no-param-reassing': 'off',
         'no-console': ['error', { allow: ['tron'] }],
+        'react-hooks/rules-of-hooks': 'error',
+        'react-hooks/exhaustive-deps': 'warn',
 
     },
 };
